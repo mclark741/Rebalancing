@@ -1,0 +1,31 @@
+
+
+
+Brokerage
+
+Run Date,Action,Symbol,Security Description,Security Type,Quantity,Price ($),Commission ($),Fees ($),Accrued Interest ($),Amount ($),Settlement Date
+ 12/15/2020, REINVESTMENT as of 12/14/2020 T ROWE PRICE BLUE CHIP GRWTH CL I (TBCIX) (Cash), TBCIX, T ROWE PRICE BLUE CHIP GRWTH CL I,Cash,0.134,161.49,,,,-21.7,
+ 12/15/2020, YOU BOUGHT PROSPECTUS UNDER SEPARATE COVER T ROWE PRICE BLUE CHIP GRWTH CL I (TBCIX) (Cash), TBCIX, T ROWE PRICE BLUE CHIP GRWTH CL I,Cash,0.575,162.72,,,,-93.58,12/16/2020
+ 12/14/2020, YOU SOLD TO BUY TBCIX FIDELITY LOW PRICED STOCK (FLPSX) (Cash), FLPSX, FIDELITY LOW PRICED STOCK,Cash,-0.151,47.25,,,,7.15,12/15/2020
+ 11/09/2020, YOU SOLD EXCHANGE FIDELITY LOW PRICED STOCK (FLPSX) (Cash), FLPSX, FIDELITY LOW PRICED STOCK,Cash,-0.368,46.69,,,,17.18,11/09/2020
+ 12/11/2020, DIVIDEND RECEIVED FIDELITY LOW PRICED STOCK (FLPSX) (Cash), FLPSX, FIDELITY LOW PRICED STOCK,Cash,,,,,,17.18,
+ 10/13/2020, PARTIC CONTR CURRENT PARTIC CONTRB CURRENER57148665 (Cash), , No Description,Cash,,,,,,287.49,
+ 12/15/2020, SHORT-TERM CAP GAIN as of 12/14/2020 T ROWE PRICE BLUE CHIP GRWTH CL I (TBCIX) (Cash), TBCIX, T ROWE PRICE BLUE CHIP GRWTH CL I,Cash,,,,,,0.02,
+ 12/15/2020, LONG-TERM CAP GAIN as of 12/14/2020 T ROWE PRICE BLUE CHIP GRWTH CL I (TBCIX) (Cash), TBCIX, T ROWE PRICE BLUE CHIP GRWTH CL I,Cash,,,,,,21.7,
+ 01/12/2021, REDEMPTION FROM CORE ACCOUNT FIDELITY GOVERNMENT CASH RESERVES (FDRXX) MORNING TRADE (Cash), FDRXX, FIDELITY GOVERNMENT CASH RESERVES,Cash,-257,1,,,,257,
+
+
+
+
+
+"The data and information in this spreadsheet is provided to you solely for your use and is not for distribution. The spreadsheet is provided for"
+"informational purposes only, and is not intended to provide advice, nor should it be construed as an offer to sell, a solicitation of an offer to buy or a"
+"recommendation for any security or insurance product by Fidelity or any third party. Data and information shown is based on information known to Fidelity as of the date it was"
+"exported and is subject to change. It should not be used in place of your account statements or trade confirmations and is not intended for tax reporting"
+"purposes. For more information on the data included in this spreadsheet, including any limitations thereof, go to Fidelity.com."
+
+"Brokerage services are provided by Fidelity Brokerage Services LLC, 900 Salem Street, Smithfield, RI 02917. Custody and other services provided by National"
+"Financial Services LLC. Both are Fidelity Investment companies and members SIPC, NYSE. Insurance products at Fidelity are distributed by"
+"Fidelity Insurance Agency, Inc., and, for certain products, by Fidelity Brokerage Services, Member NYSE, SIPC."
+
+"Date downloaded" 03/20/2021, 9:46 AM
