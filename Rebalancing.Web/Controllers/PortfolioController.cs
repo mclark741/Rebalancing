@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rebalancing.Core;
 using Rebalancing.Data.Repositories;
@@ -31,9 +28,9 @@ namespace Rebalancing.Web.Controllers
         {
             var transactions = _transactionRepository.Get();
 
-            transactions.ForEach(_portfolio.AddTransaction);
+            _portfolio.AddTransactions(transactions);
 
-            return _portfolio.Positions.OrderBy(x=>x.Symbol);
+            return _portfolio.Positions.OrderBy(x => x.Symbol);
         }
 
         // PUT: api/Portfolio/100.50

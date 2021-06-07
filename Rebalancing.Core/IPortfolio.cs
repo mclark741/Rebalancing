@@ -8,6 +8,7 @@ namespace Rebalancing.Core
         List<CurrentPosition> Positions { get; }
 
         void AddTransaction(Transaction transaction);
+        void AddTransactions(IEnumerable<Transaction> transaction);
         decimal GetCurrentValue();
         decimal GetCurrentValue(string symbol);
         CurrentPosition GetPosition(Security security);
