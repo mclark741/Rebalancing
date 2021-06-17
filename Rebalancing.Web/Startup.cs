@@ -51,7 +51,7 @@ namespace Rebalancing.Web
             {
                 options.AddPolicy(name: _myAllowSpecificOrigins, builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder.WithOrigins("http://localhost:3000", "http://localhost:4200")
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });

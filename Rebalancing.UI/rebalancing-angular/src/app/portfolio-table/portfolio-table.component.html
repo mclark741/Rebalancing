@@ -1,0 +1,31 @@
+<div *ngIf="positions">
+  <table mat-table class="full-width-table" [dataSource]="positions">
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef>Symbol</th>
+      <td mat-cell *matCellDef="let position">{{ position.symbol }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="currentValue">
+      <th mat-header-cell *matHeaderCellDef>Current Value</th>
+      <td mat-cell *matCellDef="let position">
+        {{ position.currentValue | currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="percentOfAccount">
+      <th mat-header-cell *matHeaderCellDef>% Of Account</th>
+      <td mat-cell *matCellDef="let position">
+        {{ position.percentOfAccount | percent: "1.2" }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Quantity</th>
+      <td mat-cell *matCellDef="let position">
+        {{ position.quantity }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let positionrow; columns: columnsToDisplay"></tr>
+  </table>
+</div>

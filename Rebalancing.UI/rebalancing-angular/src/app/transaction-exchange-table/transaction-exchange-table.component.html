@@ -1,0 +1,25 @@
+<div *ngIf="transactions">
+  <table mat-table [dataSource]="transactions">
+    <ng-container matColumnDef="sellSymbol">
+      <th mat-header-cell *matHeaderCellDef>Sell</th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.sellSymbol | uppercase }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="buySymbol">
+      <th mat-header-cell *matHeaderCellDef>Buy</th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.buySymbol | uppercase }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="totalAmount">
+      <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+      <td mat-cell *matCellDef="let transaction">
+        {{ transaction.totalAmount | currency }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let transactionRow; columns: columnsToDisplay"></tr>
+  </table>
+</div>

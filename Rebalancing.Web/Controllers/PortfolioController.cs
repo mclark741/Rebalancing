@@ -43,5 +43,14 @@ namespace Rebalancing.Web.Controllers
 
             return _portfolio.Rebalance(desiredPositions, additionalInvestment);
         }
+
+
+        // PUT: api/Portfolio/Exchange/100.50
+        [HttpPut("exchange/{additionalInvestment:decimal?}")]
+        public IEnumerable<TransactionExchange> RebalanceExchange([FromBody] IEnumerable<DesiredPosition> desiredPositions, decimal additionalInvestment)
+        {
+            var transactions = Rebalance(desiredPositions, additionalInvestment);
+            return _portfolio.Format(transactions);
+        }
     }
 }

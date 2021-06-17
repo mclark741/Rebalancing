@@ -1,0 +1,32 @@
+<h2>Transactions</h2>
+<app-uploader (newItemEvent)="addItem($event)"></app-uploader>
+<app-transaction-table
+  [transactions]="transactions"
+  [columnsToDisplay]="columnsToDisplay"
+></app-transaction-table>
+
+<!-- 
+<table>
+  <thead>
+    <th>Transaction Id</th>
+    <th>Quantity</th>
+    <th>Total Amount</th>
+    <th>Description</th>
+    <th>Transaction Date</th>
+    <th>Settlement Date</th>
+    <th>Symbol</th>
+    <th>Action</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let t of transactions">
+      <td>{{ t.transactionId }}</td>
+      <td>{{ t.quantity }}</td>
+      <td>{{ t.totalAmount }}</td>
+      <td>{{ t.description }}</td>
+      <td>{{ t.transactionDate }}</td>
+      <td>{{ t.settlementDate }}</td>
+      <td>{{ t.symbol }}</td>
+      <td>{{ t.action }}</td>
+    </tr>
+  </tbody>
+</table> -->

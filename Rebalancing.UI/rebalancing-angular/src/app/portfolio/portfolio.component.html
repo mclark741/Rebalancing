@@ -1,0 +1,88 @@
+<h2>Portfolio</h2>
+
+<form [formGroup]="rebalanceForm" (ngSubmit)="onExchangeSubmit()">
+  <h2>Desired Positions</h2>
+
+  <div>
+    <label for="additional-investment">Additional Investment</label>
+    <input
+      id="additional-investment"
+      type="number"
+      formControlName="additionalInvestment"
+    />
+  </div>
+
+  <table formArrayName="desiredPositions" class="mat-table">
+    <thead>
+      <tr class="mat-header-row">
+        <th class="mat-header-cell">Symbol</th>
+        <th class="mat-header-cell">% of Account</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="mat-row"
+        [formGroupName]="i"
+        *ngFor="let desiredPosition of desiredPositions.controls; let i = index"
+      >
+        <td class="mat-cell">
+          <input
+            id="desired-position-symbol-{{ i }}"
+            type="text"
+            formControlName="symbol"
+          />
+        </td>
+        <td class="mat-cell">
+          <input
+            id="desired-position-percent-of-account-{{ i }}"
+            type="number"
+            formControlName="percentOfAccount"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button (click)="addDesiredPosition()">+ Add another desired position</button>
+
+  <button class="button" type="submit">Rebalance</button>
+
+  <!-- <br />
+  <pre>{{ rebalanceForm.value | json }}</pre> -->
+</form>
+
+<div *ngIf="rebalanceTransactions.length">
+  <h2>Rebalance Transactions</h2>
+  <app-transaction-table
+    [transactions]="rebalanceTransactions"
+    [columnsToDisplay]="rebalanceColumnsToDisplay"
+  ></app-transaction-table>
+</div>
+
+<div *ngIf="exchangeTransactions.length">
+  <h2>Rebalance Exchange</h2>
+  <app-transaction-exchange-table [transactions]="exchangeTransactions">
+  </app-transaction-exchange-table>
+</div>
+
+<h2>Current Positions</h2>
+
+<app-portfolio-table [positions]="positions"></app-portfolio-table>
+
+<!-- <table>
+  <thead>
+    <th>Symbol</th>
+    <th>Quantity</th>
+    <th>Current Value</th>
+    <th>Current % of Account</th>
+    <th>Security</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of positions">
+      <td>{{ p.symbol }}</td>
+      <td>{{ p.quantity }}</td>
+      <td>{{ p.currentValue }}</td>
+      <td>{{ p.percentOfAccountRounded }}</td>
+      <td><app-security [security]="p.security"></app-security></td>
+    </tr>
+  </tbody>
+</table> -->

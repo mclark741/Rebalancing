@@ -5,7 +5,6 @@ namespace Rebalancing.Core
     {
         None = 0,
         Buy = 1,
-        Sell = 2,
-        Exchange = 3
+        Sell = 2
     }
 }

@@ -160,5 +160,158 @@ namespace Rebalancing.Core
         {
             return !string.IsNullOrWhiteSpace(transaction.Symbol) && transaction.Action != Action.None;
         }
+
+
+        public IEnumerable<TransactionExchange> Format(IEnumerable<Transaction> originalTransactions)
+        {
+            var transactions = new List<TransactionExchange>();
+
+            var buyTransactions = originalTransactions
+                                        .Where(x => x.Action == Action.Buy)
+                                        .OrderByDescending(x => Math.Abs(x.TotalAmount))
+                                        .ToList();
+            var sellTransactions = originalTransactions
+                                        .Where(x => x.Action == Action.Sell)
+                                        .OrderByDescending(x => Math.Abs(x.TotalAmount))
+                                        .ToList();
+
+            transactions.AddRange(GetTransactions(buyTransactions, sellTransactions));
+            transactions.AddRange(GetTransactions(sellTransactions, buyTransactions));
+
+            //transactions.AddRange(GetTransactions2(originalTransactions.OrderByDescending(x => Math.Abs(x.TotalAmount)).ToList()));
+
+            return transactions;
+        }
+
+        private List<string> expiredSymbols = new List<string>();
+
+        private IEnumerable<TransactionExchange> GetTransactions(List<Transaction> primaryTransactions, List<Transaction> secondaryTransaction)
+        {
+            var transactions = new List<TransactionExchange>();
+            var primaryAction = primaryTransactions.FirstOrDefault()?.Action;
+
+            foreach (var primaryTransaction in primaryTransactions.Where(t => expiredSymbols.All(e => t.Symbol != e)))
+            {
+                var totalAmount = primaryTransaction.TotalAmount;
+
+                do
+                {
+                    var matchingSecondaryTransaction = secondaryTransaction.Where(t => expiredSymbols.All(e => t.Symbol != e))
+                                                                           .FirstOrDefault(x => Math.Abs(x.TotalAmount) <= totalAmount);
+                    var exchange = new TransactionExchange
+                    {
+                        SellSymbol = primaryAction == Action.Sell ? primaryTransaction.Symbol : matchingSecondaryTransaction?.Symbol,
+                        BuySymbol = primaryAction == Action.Buy ? primaryTransaction.Symbol : matchingSecondaryTransaction?.Symbol,
+                        TotalAmount = matchingSecondaryTransaction?.TotalAmount ?? totalAmount
+                    };
+
+                    totalAmount -= exchange.TotalAmount;
+
+                    transactions.Add(exchange);
+                    expiredSymbols.Add(matchingSecondaryTransaction?.Symbol);
+
+                } while (totalAmount > 0);
+
+                expiredSymbols.Add(primaryTransaction.Symbol);
+            }
+
+            return transactions;
+        }
+
+        private IEnumerable<TransactionExchange> GetTransactions2(List<Transaction> transactions)
+        {
+            /*
+             * 
+             * loop through transactions
+             * 
+             * find secondary transaction that is 
+             * * not expired (used previousy)
+             * * total amount <= current transaction
+             * * not the same symbol as the current transaction
+             * 
+             * subtract the secondary transaction total amount from the primary transaction amount
+             * * use primary transaction action to figure out buy or sell
+             * secondary transaction has been used, expire secondary transaction
+             * 
+             * 
+             * keep subtracting secondary transaction amounts until primary transaction total value is 0
+             * primary transaction has been used, expire primary transaction
+             * if no more secondary transactions exist, buy/sell primary transaction with remaining total value
+             * 
+             * 
+             */
+
+            // loop through transactions
+            // find transaction
+            // 
+
+
+            var retVal = new List<TransactionExchange>();
+            var primaryAction = transactions.FirstOrDefault()?.Action;
+
+            foreach (var currentTransaction in transactions.Where(t => expiredSymbols.All(e => t.Symbol != e)))
+            {
+                if (expiredSymbols.Any(eS => eS == currentTransaction.Symbol))
+                {
+                    continue;
+                }
+
+                var totalAmount = currentTransaction.TotalAmount;
+
+                do
+                {
+                    var matchingSecondaryTransaction = transactions.FirstOrDefault(x => expiredSymbols.All(eS => x.Symbol != eS)
+                                                                               && x.Symbol != currentTransaction.Symbol
+                                                                               && x.Action != currentTransaction.Action);
+                    //.FirstOrDefault(x => Math.Abs(x.TotalAmount) <= totalAmount);
+
+                    var exchange = currentTransaction.Action == Action.Buy ?
+                     new TransactionExchange
+                     {
+                         SellSymbol = matchingSecondaryTransaction?.Symbol,
+                         BuySymbol = currentTransaction.Symbol,
+                         TotalAmount = Math.Min(matchingSecondaryTransaction?.TotalAmount ?? totalAmount, totalAmount)
+                     } :
+                     new TransactionExchange
+                     {
+                         SellSymbol = currentTransaction.Symbol,
+                         BuySymbol = matchingSecondaryTransaction?.Symbol,
+                         TotalAmount = Math.Min(matchingSecondaryTransaction?.TotalAmount ?? totalAmount, totalAmount)
+                     };
+
+                    totalAmount -= exchange.TotalAmount;
+
+                    retVal.Add(exchange);
+
+                    var remainder = (matchingSecondaryTransaction?.TotalAmount).GetValueOrDefault() - exchange.TotalAmount;
+
+                    if (remainder != 0)
+                    {
+                        var exchangeRemainder = currentTransaction.Action == Action.Buy ?
+                            new TransactionExchange
+                            {
+                                SellSymbol = matchingSecondaryTransaction?.Symbol,
+                                BuySymbol = currentTransaction.Symbol,
+                                TotalAmount = remainder
+                            } :
+                            new TransactionExchange
+                            {
+                                SellSymbol = currentTransaction.Symbol,
+                                BuySymbol = matchingSecondaryTransaction?.Symbol,
+                                TotalAmount = remainder
+                            };
+
+                        retVal.Add(exchangeRemainder);
+                    }
+
+                    expiredSymbols.Add(matchingSecondaryTransaction?.Symbol);
+
+                } while (totalAmount > 0);
+
+                expiredSymbols.Add(currentTransaction.Symbol);
+            }
+
+            return retVal;
+        }
     }
 }
