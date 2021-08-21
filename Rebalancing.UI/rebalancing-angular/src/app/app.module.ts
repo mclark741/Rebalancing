@@ -22,6 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { PortfolioTableComponent } from './portfolio-table/portfolio-table.component';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { UploaderComponent } from './uploader/uploader.component';
@@ -63,6 +65,8 @@ export function initializeApp(appConfig: AppConfig) {
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   providers: [
     AppConfig,
