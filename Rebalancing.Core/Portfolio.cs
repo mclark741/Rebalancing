@@ -77,6 +77,8 @@ namespace Rebalancing.Core
         /// <returns></returns>
         public IEnumerable<Transaction> Rebalance(IEnumerable<DesiredPosition> desiredPositions, decimal additionalInvestment = 0)
         {
+            var transactionsTemp = new List<Transaction>();
+
             foreach (var desiredPosition in desiredPositions)
             {
                 var currentPosition = GetPosition(desiredPosition.Symbol);
@@ -94,8 +96,57 @@ namespace Rebalancing.Core
                     Action = difference > 0 ? Action.Buy : Action.Sell,
                     TotalAmount = Math.Round(Math.Abs(difference), 2)
                 };
-                yield return transaction;
+                transactionsTemp.Add(transaction);
             }
+
+            var transactions = FixRoundingError(transactionsTemp, additionalInvestment);
+
+            return transactions;
+
+        }
+
+        /// <summary>
+        /// Adjusts transactions to compensate for rounding error by removing the difference from the last transaction
+        /// </summary>
+        /// <param name="originalTransactions"></param>
+        /// <param name="additionalInvestment"></param>
+        public List<Transaction> FixRoundingError(List<Transaction> originalTransactions, decimal additionalInvestment)
+        {
+            var adjustedTransactions = new List<Transaction>();
+
+            // copy all transactions to a new collection so we don't modify the original collections
+            originalTransactions.ForEach(x => adjustedTransactions.Add(new Transaction
+            {
+                Action = x.Action,
+                Description = x.Description,
+                Quantity = x.Quantity,
+                SettlementDate = x.SettlementDate,
+                Symbol = x.Symbol,
+                TotalAmount = x.TotalAmount,
+                TransactionDate = x.TransactionDate,
+                TransactionId = x.TransactionId
+            }));
+
+
+            // since buy and sell transactions are both positive numbers, they have to be summed up separately
+            var buyTransactions = adjustedTransactions.Where(x => x.Action == Action.Buy).Sum(x => x.TotalAmount);
+            var sellTransactions = adjustedTransactions.Where(x => x.Action == Action.Sell).Sum(x => x.TotalAmount);
+
+            var totalTransactionValue = buyTransactions - sellTransactions;
+
+            // this should be true for this list of be accurate.
+            bool isValid = buyTransactions == sellTransactions + additionalInvestment;
+
+            // totalTransactionValue may be higher than additional investment due to rounding
+            // additionalInvestment is the control value and we cannot exceed that number
+            if (totalTransactionValue > additionalInvestment)
+            {
+                // figure out the difference and subtract it from the last Buy transaction
+                var difference = totalTransactionValue - additionalInvestment;
+                adjustedTransactions.Last(x => x.Action == Action.Buy && x.TotalAmount > difference).TotalAmount -= difference;
+            }
+
+            return adjustedTransactions;
         }
 
         /// <summary>
