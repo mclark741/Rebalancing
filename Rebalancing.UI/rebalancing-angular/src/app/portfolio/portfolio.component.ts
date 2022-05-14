@@ -9,6 +9,7 @@ import { RebalancePosition } from '../rebalance-position';
 import { Observable } from 'rxjs';
 import { Transaction } from '../transaction';
 import { TransactionExchange } from '../transaction-exchange';
+import { AppConfig } from '../app-config';
 
 @Component({
   selector: 'app-portfolio',
@@ -52,14 +53,7 @@ export class PortfolioComponent implements OnInit {
 
     const rebalanceData: RebalanceModel = {
       additionalInvestment: 0,
-      desiredPositions: [
-        { symbol: 'FLPSX', percentOfAccount: 0.2 },
-        { symbol: 'FPADX', percentOfAccount: 0.15 },
-        { symbol: 'FRESX', percentOfAccount: 0.1 },
-        { symbol: 'FSPSX', percentOfAccount: 0.15 },
-        { symbol: 'FSSNX', percentOfAccount: 0.2 },
-        { symbol: 'TBCIX', percentOfAccount: 0.2 },
-      ],
+      desiredPositions: [...AppConfig.settings.modelPortfolioDesiredPositions],
     };
 
     rebalanceData.desiredPositions.forEach((x) => {
@@ -110,7 +104,7 @@ export class PortfolioComponent implements OnInit {
     this.rebalance(this.rebalanceForm.value).subscribe(
       (x) => (this.rebalanceTransactions = x)
     );
-    
+
     this.exchange(this.rebalanceForm.value).subscribe(
       (x) => (this.exchangeTransactions = x)
     );

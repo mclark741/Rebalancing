@@ -6,6 +6,7 @@ export interface IAppConfig {
   appInsights: {
     instrumentationKey: string;
   };
+  modelPortfolioDesiredPositions: [];
   logging: {
     console: boolean;
     appInsights: boolean;
