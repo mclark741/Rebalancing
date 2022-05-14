@@ -30,7 +30,7 @@ namespace Rebalancing.Web.Controllers
 
             _portfolio.AddTransactions(transactions);
 
-            return _portfolio.Positions.OrderBy(x => x.Symbol);
+            return _portfolio.Positions.Where(x => x.Quantity > 0).OrderBy(x => x.Symbol);
         }
 
         // PUT: api/Portfolio/100.50
