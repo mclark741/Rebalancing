@@ -15,6 +15,8 @@ namespace Rebalancing.Core
         CurrentPosition GetPosition(string symbol);
         decimal GetQuantity(string symbol);
         IEnumerable<Transaction> Rebalance(IEnumerable<DesiredPosition> desiredPositions, decimal additionalInvestment = 0);
+        List<Transaction> FixRoundingError(List<Transaction> transactions, decimal additionalInvestment);
         IEnumerable<TransactionExchange> Format(IEnumerable<Transaction> originalTransactions);
+
     }
 }

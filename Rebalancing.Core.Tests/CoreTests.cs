@@ -187,6 +187,157 @@ namespace Rebalancing.Core.Tests
 
 
         [Test]
+        public void TestFixRoundingError()
+        {
+            // Arrange
+
+
+            decimal buyAAATotal = _aaa.Price * 100 + .01m;
+            decimal buyBBBTotal = _bbb.Price * 100;
+            decimal sellBBBTotal = _bbb.Price * 200;
+
+            var buyAAA = new Transaction
+            {
+                Action = Action.Buy,
+                Symbol = _aaa.Symbol,
+                Quantity = 100,
+                TotalAmount = buyAAATotal
+            };
+            var buyBBB = new Transaction
+            {
+                Action = Action.Buy,
+                Symbol = _bbb.Symbol,
+                Quantity = 200,
+                TotalAmount = buyBBBTotal
+            };
+            var sellBBB = new Transaction
+            {
+                Action = Action.Sell,
+                Symbol = _bbb.Symbol,
+                Quantity = 100,
+                TotalAmount = sellBBBTotal
+            };
+
+            Portfolio portfolio = new Portfolio(_market);
+
+            var originalTransactions = new List<Transaction> { buyAAA, buyBBB, sellBBB };
+
+            // Act
+            var adjustedTransactions = portfolio.FixRoundingError(originalTransactions, 0);
+
+            // Assert
+            var expectedBuyTransactionA = new Transaction
+            {
+                Action = Action.Buy,
+                TotalAmount = 2500.01m,
+                Symbol = _aaa.Symbol
+            };
+            var expectedBuyTransactionB = new Transaction
+            {
+                Action = Action.Buy,
+                TotalAmount = 2499.99m,
+                Symbol = _bbb.Symbol
+            };
+            var expectedSellTransactionB = new Transaction
+            {
+                Action = Action.Sell,
+                TotalAmount = 5000,
+                Symbol = _bbb.Symbol
+            };
+
+
+            Assert.AreEqual(buyAAATotal, originalTransactions.First(x => x.Action == Action.Buy && x.Symbol == _aaa.Symbol).TotalAmount);
+            Assert.AreEqual(buyBBBTotal, originalTransactions.First(x => x.Action == Action.Buy && x.Symbol == _bbb.Symbol).TotalAmount);
+            Assert.AreEqual(sellBBBTotal, originalTransactions.First(x => x.Action == Action.Sell && x.Symbol == _bbb.Symbol).TotalAmount);
+
+
+            var transactionArray = adjustedTransactions.ToArray();
+
+            Assert.AreEqual(expectedBuyTransactionA.Symbol, transactionArray[0].Symbol);
+            Assert.AreEqual(expectedBuyTransactionA.TotalAmount, transactionArray[0].TotalAmount);
+
+            Assert.AreEqual(expectedBuyTransactionB.Symbol, transactionArray[1].Symbol);
+            Assert.AreEqual(expectedBuyTransactionB.TotalAmount, transactionArray[1].TotalAmount);
+
+            Assert.AreEqual(expectedSellTransactionB.Symbol, transactionArray[2].Symbol);
+            Assert.AreEqual(expectedSellTransactionB.TotalAmount, transactionArray[2].TotalAmount);
+        }
+
+        [Test]
+        public void TestFixRoundingErrorWithAdditionalInvestment()
+        {
+            // Arrange
+            decimal buyAAATotal = _aaa.Price * 100 + .02m;
+            decimal buyBBBTotal = _bbb.Price * 200 + .02m;
+            decimal sellBBBTotal = _bbb.Price * 200;
+
+            var buyAAA = new Transaction
+            {
+                Action = Action.Buy,
+                Symbol = _aaa.Symbol,
+                Quantity = 100,
+                TotalAmount = buyAAATotal
+            };
+            var buyBBB = new Transaction
+            {
+                Action = Action.Buy,
+                Symbol = _bbb.Symbol,
+                Quantity = 200,
+                TotalAmount = buyBBBTotal
+            };
+            var sellBBB = new Transaction
+            {
+                Action = Action.Sell,
+                Symbol = _bbb.Symbol,
+                Quantity = 100,
+                TotalAmount = sellBBBTotal
+            };
+
+            Portfolio portfolio = new Portfolio(_market);
+
+            var originalTransactions = new List<Transaction> { buyAAA, buyBBB, sellBBB };
+
+            // Act
+            var adjustedTransactions = portfolio.FixRoundingError(originalTransactions, 2500);
+
+            // Assert
+            var expectedBuyTransactionA = new Transaction
+            {
+                Action = Action.Buy,
+                TotalAmount = 2500.02m,
+                Symbol = _aaa.Symbol
+            };
+            var expectedBuyTransactionB = new Transaction
+            {
+                Action = Action.Buy,
+                TotalAmount = 4999.98m,
+                Symbol = _bbb.Symbol
+            };
+            var expectedSellTransactionB = new Transaction
+            {
+                Action = Action.Sell,
+                TotalAmount = 5000,
+                Symbol = _bbb.Symbol
+            };
+
+            Assert.AreEqual(buyAAATotal, originalTransactions.First(x => x.Action == Action.Buy && x.Symbol == _aaa.Symbol).TotalAmount);
+            Assert.AreEqual(buyBBBTotal, originalTransactions.First(x => x.Action == Action.Buy && x.Symbol == _bbb.Symbol).TotalAmount);
+            Assert.AreEqual(sellBBBTotal, originalTransactions.First(x => x.Action == Action.Sell && x.Symbol == _bbb.Symbol).TotalAmount);
+
+            var transactionArray = adjustedTransactions.ToArray();
+
+            Assert.AreEqual(expectedBuyTransactionA.Symbol, transactionArray[0].Symbol);
+            Assert.AreEqual(expectedBuyTransactionA.TotalAmount, transactionArray[0].TotalAmount);
+
+            Assert.AreEqual(expectedBuyTransactionB.Symbol, transactionArray[1].Symbol);
+            Assert.AreEqual(expectedBuyTransactionB.TotalAmount, transactionArray[1].TotalAmount);
+
+            Assert.AreEqual(expectedSellTransactionB.Symbol, transactionArray[2].Symbol);
+            Assert.AreEqual(expectedSellTransactionB.TotalAmount, transactionArray[2].TotalAmount);
+        }
+
+
+        [Test]
         public void TestQuantity()
         {
             // Arrange
@@ -212,7 +363,6 @@ namespace Rebalancing.Core.Tests
             Portfolio portfolio = new Portfolio(_market);
 
             // Act
-
             portfolio.AddTransactions(new[] { buyAAA, buyBBB, sellBBB });
 
             // Assert
