@@ -50,9 +50,11 @@ namespace Rebalancing.Integrations
 
             var isExpired = databaseSecurities.Any(db => db.LastUpdateDate < DateTime.Today);
 
-            IEnumerable<Security> securities = databaseSecurities;
+            List<Security> securities = databaseSecurities.ToList();
 
-            if (_makeMarketWebCalls && (isExpired || !databaseSecurities.Any()))
+            var previouslyDownloadedAllSecurities = symbols.All(s => databaseSecurities.Select(x => x.Symbol).Contains(s));
+
+            if (_makeMarketWebCalls && (isExpired || !databaseSecurities.Any() || !previouslyDownloadedAllSecurities))
             {
                 var marketSecurities = createSecurity().ToList();
                 securities = marketSecurities;
@@ -69,7 +71,7 @@ namespace Rebalancing.Integrations
                         d.Price = m.Price;
                         d.LastUpdateDate = DateTime.Now;
                     });
-                  
+
                     _securityRepository.Update(databaseSecurities);
                 }
             }
