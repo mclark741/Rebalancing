@@ -24,8 +24,8 @@ namespace Rebalancing.Import
 
         public static Core.Action GetAction(string actionVal)
         {
-            List<string> buyStrings = new List<string> { "YOU BOUGHT", "REINVESTMENT" };
-            List<string> sellStrings = new List<string> { "YOU SOLD" };
+            List<string> buyStrings = new List<string> { "YOU BOUGHT", "REINVESTMENT", "SELL CANCEL" };
+            List<string> sellStrings = new List<string> { "YOU SOLD", "BUY CANCEL" };
 
             Core.Action action = Core.Action.None;
 
