@@ -2,7 +2,7 @@
 
 
 ```
-dotnet ef --startup-project ../Rebalancing.Web/ migrations add Initial
+dotnet ef --startup-project ../Rebalancing.Web/ migrations add InitialLocalhost
 ```
 
 ```
