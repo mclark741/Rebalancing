@@ -31,7 +31,6 @@ namespace Rebalancing.Core
                 return false;
             else if (t1.Quantity == t2.Quantity
                 && t1.TotalAmount == t2.TotalAmount
-                && t1.Description == t2.Description
                 && t1.TransactionDate == t2.TransactionDate
                 && t1.SettlementDate == t2.SettlementDate
                 && t1.Symbol == t2.Symbol
@@ -45,7 +44,6 @@ namespace Rebalancing.Core
         {
             int hCode = t.Quantity.GetHashCode()
                         ^ t.TotalAmount.GetHashCode()
-                        ^ t.Description.GetHashCode()
                         ^ t.TransactionDate.GetHashCode()
                         ^ t.SettlementDate.GetHashCode()
                         ^ t.Symbol.GetHashCode()
