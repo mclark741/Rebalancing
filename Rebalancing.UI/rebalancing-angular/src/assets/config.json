@@ -3,7 +3,14 @@
     "name": "DEV"
   },
   "apiUrl": "https://localhost:65402/api",
-
+  "modelPortfolioDesiredPositions": [
+    { "symbol": "FBGRX", "percentOfAccount": 0.2 },
+    { "symbol": "FLPSX", "percentOfAccount": 0.2 },
+    { "symbol": "FSSNX", "percentOfAccount": 0.2 },
+    { "symbol": "MIEIX", "percentOfAccount": 0.15 },
+    { "symbol": "FPADX", "percentOfAccount": 0.15 },
+    { "symbol": "FRESX", "percentOfAccount": 0.1 }
+  ],
   "appInsights": {
     "instrumentationKey": "<dev-guid-here>"
   },
