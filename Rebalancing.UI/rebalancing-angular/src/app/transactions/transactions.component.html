@@ -1,5 +1,7 @@
 <h2>Transactions</h2>
-<app-uploader (newItemEvent)="addItem($event)"></app-uploader>
+<!-- <app-uploader (newItemEvent)="addItem($event)"></app-uploader> -->
+<app-pretty-uploader (uploadCompleteEvent)="addItem($event)"></app-pretty-uploader>
+
 <!-- <app-transaction-table
   [transactions]="transactions"
   [columnsToDisplay]="columnsToDisplay"

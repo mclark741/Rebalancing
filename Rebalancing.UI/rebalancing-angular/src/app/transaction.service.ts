@@ -46,17 +46,7 @@ export class TransactionService {
   //   ...
   // }
 
-  upload(file: File): Observable<Transaction[]> {
-    if (!file) {
-      return of<Transaction[]>();
-    }
-
-    // COULD HAVE WRITTEN:
-    // return this.http.post('/upload/file', file, {
-    //   reportProgress: true,
-    //   observe: 'events'
-    // }).pipe(
-
+  upload(file: File) {
     // Create the request object that POSTs the file to an upload endpoint.
     // The `reportProgress` option tells HttpClient to listen and return
     // XHR progress events.
@@ -81,9 +71,12 @@ export class TransactionService {
     //   catchError(this.handleFileError(file))
     // );
 
-    return this.http.post<Transaction[]>(url, formData).pipe(
-      tap((_) => this.log('fetched transactions')),
-      catchError(this.handleError<Transaction[]>('getTransactions', []))
+    return this.http.post(url, formData, {
+      reportProgress: true,
+      observe: 'events'
+    }).pipe(
+      tap((_) => this.log('uploading transactions')),
+      catchError(this.handleError('upload', []))
     );
   }
 

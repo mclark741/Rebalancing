@@ -1,0 +1,27 @@
+<input
+  type="file"
+  class="file-input"
+  [accept]="requiredFileType"
+  (change)="onFileSelected($event)"
+  #fileUpload
+/>
+
+<div
+  class="file-upload"
+  appDragDropFileUpload
+  (click)="fileUpload.click()"
+  (fileDropped)="onFileDropped($event)"
+>
+  <span> {{ fileName || "Choose a file or drag here" }}</span>
+
+</div>
+
+<div class="progress">
+  <mat-progress-bar
+    class="progress-bar"
+    mode="determinate"
+    [value]="uploadProgress"
+    *ngIf="uploadProgress"
+  >
+  </mat-progress-bar>
+</div>

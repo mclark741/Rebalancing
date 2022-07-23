@@ -24,12 +24,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PortfolioTableComponent } from './portfolio-table/portfolio-table.component';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { UploaderComponent } from './uploader/uploader.component';
 import { MessagesComponent } from './messages/messages.component';
 import { TransactionExchangeTableComponent } from './transaction-exchange-table/transaction-exchange-table.component';
 import { AppConfig } from './app-config';
+import { PrettyUploaderComponent } from './pretty-uploader/pretty-uploader.component';
+import { DragDropFileUploadDirective } from './drag-drop-file-upload.directive';
 
 export function initializeApp(appConfig: AppConfig) {
   return () => appConfig.load();
@@ -47,6 +50,8 @@ export function initializeApp(appConfig: AppConfig) {
     UploaderComponent,
     MessagesComponent,
     TransactionExchangeTableComponent,
+    PrettyUploaderComponent,
+    DragDropFileUploadDirective,
   ],
   imports: [
     BrowserModule,
@@ -66,7 +71,8 @@ export function initializeApp(appConfig: AppConfig) {
     MatIconModule,
     MatListModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatProgressBarModule,
   ],
   providers: [
     AppConfig,
