@@ -1,88 +1,78 @@
 <h2>Portfolio</h2>
 
-<form [formGroup]="rebalanceForm" (ngSubmit)="onExchangeSubmit()">
-  <h2>Desired Positions</h2>
-
-  <div>
-    <label for="additional-investment">Additional Investment</label>
+<h3>Desired Positions</h3>
+<div class="rebalance-form" [formGroup]="rebalanceForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Additional Investment</mat-label>
     <input
+      matInput
       id="additional-investment"
       type="number"
       formControlName="additionalInvestment"
     />
-  </div>
-
-  <table formArrayName="desiredPositions" class="mat-table">
-    <thead>
-      <tr class="mat-header-row">
-        <th class="mat-header-cell">Symbol</th>
-        <th class="mat-header-cell">% of Account</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        class="mat-row"
-        [formGroupName]="i"
-        *ngFor="let desiredPosition of desiredPositions.controls; let i = index"
-      >
-        <td class="mat-cell">
+  </mat-form-field>
+  <ng-container formArrayName="desiredPositions">
+    <ng-container
+      [formGroupName]="i"
+      *ngFor="let desiredPosition of desiredPositions.controls; let i = index"
+    >
+      <div class="rebalance-form-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Symbol</mat-label>
           <input
+            matInput
             id="desired-position-symbol-{{ i }}"
             type="text"
             formControlName="symbol"
           />
-        </td>
-        <td class="mat-cell">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>% of Account</mat-label>
           <input
+            matInput
             id="desired-position-percent-of-account-{{ i }}"
             type="number"
             formControlName="percentOfAccount"
           />
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <button (click)="addDesiredPosition()">+ Add another desired position</button>
+        </mat-form-field>
 
-  <button class="button" type="submit">Rebalance</button>
+        <mat-icon class="delete-btn" (click)="deleteDesiredPosition(i)">
+          delete_forever</mat-icon
+        >
+      </div>
+    </ng-container>
+  </ng-container>
 
-  <!-- <br />
-  <pre>{{ rebalanceForm.value | json }}</pre> -->
-</form>
+  <button mat-mini-fab (click)="addDesiredPosition()">
+    <mat-icon class="add-course-btn">add</mat-icon> 
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onExchangeSubmit()"
+    type="submit"
+  >
+    Rebalance
+  </button>
+</div>
 
-<div *ngIf="rebalanceTransactions.length">
-  <h2>Rebalance Transactions</h2>
+
+<ng-container *ngIf="rebalanceTransactions.length">
+  <h3>Rebalance Transactions</h3>
   <app-transaction-table
     [transactions]="rebalanceTransactions"
     [columnsToDisplay]="rebalanceColumnsToDisplay"
   ></app-transaction-table>
-</div>
+</ng-container>
 
-<div *ngIf="exchangeTransactions.length">
-  <h2>Rebalance Exchange</h2>
+<ng-container *ngIf="exchangeTransactions.length">
+  <h3>Rebalance Exchange</h3>
   <app-transaction-exchange-table [transactions]="exchangeTransactions">
   </app-transaction-exchange-table>
-</div>
+</ng-container>
 
-<h2>Current Positions</h2>
-
-<app-portfolio-table [positions]="positions"></app-portfolio-table>
-
-<!-- <table>
-  <thead>
-    <th>Symbol</th>
-    <th>Quantity</th>
-    <th>Current Value</th>
-    <th>Current % of Account</th>
-    <th>Security</th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let p of positions">
-      <td>{{ p.symbol }}</td>
-      <td>{{ p.quantity }}</td>
-      <td>{{ p.currentValue }}</td>
-      <td>{{ p.percentOfAccountRounded }}</td>
-      <td><app-security [security]="p.security"></app-security></td>
-    </tr>
-  </tbody>
-</table> -->
+<ng-container>
+  <h3>Current Positions</h3>
+  <app-portfolio-table [positions]="positions"></app-portfolio-table>
+</ng-container>

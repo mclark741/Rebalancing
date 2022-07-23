@@ -92,20 +92,24 @@ export class PortfolioComponent implements OnInit {
     this.desiredPositions.push(this.buildPosition(position));
   }
 
+  deleteDesiredPosition(positionIndex: number) {
+    this.desiredPositions.removeAt(positionIndex);
+  }
+
   onRebalanceSubmit() {
     console.debug(this.rebalanceForm.value);
-    this.rebalance(this.rebalanceForm.value).subscribe(
+    this.rebalance(this.rebalanceForm.value as RebalanceModel).subscribe(
       (x) => (this.rebalanceTransactions = x)
     );
   }
 
   onExchangeSubmit() {
     console.debug(this.rebalanceForm.value);
-    this.rebalance(this.rebalanceForm.value).subscribe(
+    this.rebalance(this.rebalanceForm.value as RebalanceModel).subscribe(
       (x) => (this.rebalanceTransactions = x)
     );
 
-    this.exchange(this.rebalanceForm.value).subscribe(
+    this.exchange(this.rebalanceForm.value as RebalanceModel).subscribe(
       (x) => (this.exchangeTransactions = x)
     );
   }
