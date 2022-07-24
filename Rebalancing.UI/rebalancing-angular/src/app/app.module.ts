@@ -25,6 +25,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
 import { PortfolioTableComponent } from './portfolio-table/portfolio-table.component';
 import { TransactionTableComponent } from './transaction-table/transaction-table.component';
 import { UploaderComponent } from './uploader/uploader.component';
@@ -73,6 +74,7 @@ export function initializeApp(appConfig: AppConfig) {
     MatFormFieldModule,
     MatInputModule,
     MatProgressBarModule,
+    MatCardModule,
   ],
   providers: [
     AppConfig,
