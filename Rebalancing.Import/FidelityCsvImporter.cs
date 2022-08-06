@@ -72,7 +72,7 @@ namespace Rebalancing.Import
                     {
                         using (var csv = new CsvReader(fileBody, CultureInfo.InvariantCulture))
                         {
-                            csv.Configuration.RegisterClassMap<FidelityTransactionMap>();
+                            csv.Context.RegisterClassMap<FidelityTransactionMap>();
                             var records = csv.GetRecords<FidelityTransaction>();
 
                             foreach (var r in records)

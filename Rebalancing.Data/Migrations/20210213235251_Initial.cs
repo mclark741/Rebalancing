@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using MySql.EntityFrameworkCore.Metadata;
 
 namespace Rebalancing.Data.Migrations
 {
@@ -13,7 +13,7 @@ namespace Rebalancing.Data.Migrations
                 columns: table => new
                 {
                     SecurityId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Symbol = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<decimal>(nullable: false),
@@ -29,7 +29,7 @@ namespace Rebalancing.Data.Migrations
                 columns: table => new
                 {
                     PositionId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     PercentOfAccount = table.Column<decimal>(nullable: false),
                     SecurityId = table.Column<int>(nullable: true)
                 },
@@ -49,7 +49,7 @@ namespace Rebalancing.Data.Migrations
                 columns: table => new
                 {
                     TransactionId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                        .Annotation("MySql:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Quantity = table.Column<decimal>(nullable: false),
                     TotalAmount = table.Column<decimal>(nullable: false),
                     SecurityId = table.Column<int>(nullable: true),

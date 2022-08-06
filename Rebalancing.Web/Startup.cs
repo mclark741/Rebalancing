@@ -32,7 +32,7 @@ namespace Rebalancing.Web
         {
             // Entity Framework
             services.AddDbContextPool<RebalancingDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+               options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<ISecurityRepository, SecurityRepository>();
