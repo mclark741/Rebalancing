@@ -31,12 +31,6 @@ namespace Rebalancing.Integrations
                 var request = new RapidApiYahooFinanceRequest(symbols);
                 var quote = _client.GetQuote(request);
                 var securities = quote.Result.GetSecurities();
-
-                //var strResponse = "[{\"securityId\": 0, \"symbol\": \"FLPSX\", \"description\": \"Fidelity Low-Priced Stock Fund\", \"price\": 52.17, \"lastUpdateDate\": \"2021-02-14T08:41:44.655561-06:00\"}, {\"securityId\": 0, \"symbol\": \"FPADX\", \"description\": \"Fidelity Emerging Markets Index Fund\", \"price\": 14.2, \"lastUpdateDate\": \"2021-02-14T08:41:44.655588-06:00\"}, {\"securityId\": 0, \"symbol\": \"FRESX\", \"description\": \"Fidelity Real Estate Investment Portfolio\", \"price\": 41.03, \"lastUpdateDate\": \"2021-02-14T08:41:44.655592-06:00\"}, {\"securityId\": 0, \"symbol\": \"FSPSX\", \"description\": \"Fidelity International Index Fund\", \"price\": 47.5, \"lastUpdateDate\": \"2021-02-14T08:41:44.655597-06:00\"}, {\"securityId\": 0, \"symbol\": \"FSSNX\", \"description\": \"Fidelity Small Cap Index Fund\", \"price\": 28.98, \"lastUpdateDate\": \"2021-02-14T08:41:44.6556-06:00\"}, {\"securityId\": 0, \"symbol\": \"TBCIX\", \"description\": \"T. Rowe Price Blue Chip Growth Fund I Class\", \"price\": 176.6, \"lastUpdateDate\": \"2021-02-14T08:41:44.655605-06:00\"} ]";
-
-                //var securities = JsonConvert.DeserializeObject<IEnumerable<Security>>(strResponse);
-
-
                 return securities;
             });
 
@@ -46,33 +40,36 @@ namespace Rebalancing.Integrations
 
         private IEnumerable<Security> GetOrCreateOrUpdate(string[] symbols, Func<IEnumerable<Security>> createSecurity)
         {
-            var databaseSecurities = _securityRepository.Get(symbols);
-
-            var isExpired = databaseSecurities.Any(db => db.LastUpdateDate < DateTime.Today);
-
+            // fetch all securities from the database
+            var databaseSecurities = _securityRepository.Get(symbols).ToList();
             List<Security> securities = databaseSecurities.ToList();
 
-            var previouslyDownloadedAllSecurities = symbols.All(s => databaseSecurities.Select(x => x.Symbol).Contains(s));
+            // make sure the price is current as of midnight last night
+            var isExpired = databaseSecurities.Any(db => db.LastUpdateDate < DateTime.Today);
 
-            if (_makeMarketWebCalls && (isExpired || !databaseSecurities.Any() || !previouslyDownloadedAllSecurities))
+            // check to see if there are any new securities in the request that are not in the database
+            var allSymbolsFoundInDatabase = symbols.All(s => databaseSecurities.Select(x => x.Symbol).Contains(s, StringComparer.OrdinalIgnoreCase));
+
+            if (_makeMarketWebCalls && (isExpired || !allSymbolsFoundInDatabase))
             {
+                // execute the delegate to get current Market pricing
                 var marketSecurities = createSecurity().ToList();
-                securities = marketSecurities;
-                if (databaseSecurities?.Any() == false)
-                {
-                    // TODO: fix the case where we need insert some and update some
-                    _securityRepository.Add(marketSecurities);
-                }
-                else
-                {
-                    databaseSecurities.ToList().ForEach(d =>
-                    {
-                        var m = marketSecurities.FirstOrDefault(x => x.Symbol.Equals(d.Symbol, StringComparison.OrdinalIgnoreCase));
-                        d.Price = m.Price;
-                        d.LastUpdateDate = DateTime.Now;
-                    });
 
-                    _securityRepository.Update(databaseSecurities);
+                // update existing securities
+                databaseSecurities.ToList().ForEach(d =>
+                {
+                    var m = marketSecurities.FirstOrDefault(x => x.Symbol.Equals(d.Symbol, StringComparison.OrdinalIgnoreCase));
+                    d.Price = m.Price;
+                    d.LastUpdateDate = DateTime.Now;
+                });
+                _securityRepository.Update(databaseSecurities);
+
+                // add new securities
+                var securitiesToAdd = marketSecurities.Except(databaseSecurities, new SecuritySymbolEqualityComparer()).ToList();
+                if (securitiesToAdd.Any())
+                {
+                    _securityRepository.Add(securitiesToAdd);
+                    securities.AddRange(securitiesToAdd);
                 }
             }
 

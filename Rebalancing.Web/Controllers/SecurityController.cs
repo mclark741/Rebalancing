@@ -50,14 +50,15 @@ namespace Rebalancing.Web.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IEnumerable<Security> GetBySymbol(string symbols)
         {
+            string symbolsUpper = symbols.ToUpperInvariant();
             string[] symbolsSplit;
-            if (symbols.Contains(","))
+            if (symbolsUpper.Contains(','))
             {
-                symbolsSplit = symbols.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                symbolsSplit = symbolsUpper.Split(",", StringSplitOptions.RemoveEmptyEntries);
             }
             else
             {
-                symbolsSplit = new[] { symbols };
+                symbolsSplit = new[] { symbolsUpper };
             }
 
             var marketSecurities = _market.GetSecurities(symbolsSplit);
