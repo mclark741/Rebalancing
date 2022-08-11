@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebalancing.Data", "Rebalan
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3EDBA904-2368-4A8B-A322-EAB7642E4223}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{E1B0CBE0-09D8-4009-BCD8-795E34799F83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{EA277C57-3B7C-4668-921A-49AF17908367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA277C57-3B7C-4668-921A-49AF17908367}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA277C57-3B7C-4668-921A-49AF17908367}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1B0CBE0-09D8-4009-BCD8-795E34799F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1B0CBE0-09D8-4009-BCD8-795E34799F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1B0CBE0-09D8-4009-BCD8-795E34799F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1B0CBE0-09D8-4009-BCD8-795E34799F83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

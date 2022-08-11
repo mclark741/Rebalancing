@@ -1,0 +1,34 @@
+version: '3.4'
+
+#create a volume for the my sql container.To ensure Data persists after my sql container is stopped
+volumes:
+  datafiles:
+
+services:
+  database:
+    #Pull the latest mysql image
+    image: mysql:8.0
+    #Map port 3306 on the mysql container to port 3306 in the host
+    ports:
+      - "3306:3306"
+    #Specify where the persisted Data should be stored
+    volumes:
+      - datafiles:/Users/mclark/Develop/mysql_data
+      #- "~/sql-scripts/setup.sql:/docker-entrypoint-initdb.d/1.sql"
+    restart: always
+    #Specify Environment Variables for mysql
+    #environment: 
+    #  MYSQL_ROOT_PASSWORD: Root0++
+    #  MYSQL_USER: newuser
+    #  MYSQL_PASSWORD: pass@word1234
+    #  MYSQL_DATABASE: Usersdb
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ~/.aspnet/https:/root/.aspnet/https:ro
+      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
