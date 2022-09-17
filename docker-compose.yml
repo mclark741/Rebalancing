@@ -2,7 +2,12 @@ version: '3.4'
 
 services:
   api:
-    image: ${DOCKER_REGISTRY-}rebalancing
+    image: ${DOCKER_REGISTRY-}api
     build:
       context: .
       dockerfile: Rebalancing.Web/Dockerfile
+  client:
+    image: ${DOCKER_REGISTRY-}client
+    build:
+      context: ./Rebalancing.UI/rebalancing-angular
+      dockerfile: dockerfile
